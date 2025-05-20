@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Domain Origin Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .enter{ text-align: center; } 
+        
+        .output {
+            margin-top: 20px;
+            padding: 10px 10px 50px;
+        }
+        .output p {
+            margin: 5px 0;
+        }
+        p {
+            background: #e8e8e8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .txtbx {
+            padding: 10px;
+            font-size: 15px;
+            width: 300px;
+        }
+        .copy-btn {
+            padding: 15px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #5da40d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            margin: 10px auto;
+            display: block;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .copy-btn:hover {
+            background-color: #367f4b;
+            transform: translateY(-3px);
+        }
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 2px solid #ccc;
+        }
+		.output p.bulkurl{ min-height: auto; min-height: auto; max-width: 500px; margin: 15px auto; }
+		.output p{ font-size: 15px; min-height: 285px; }
+		h3{ max-width: 500px; margin: 0 auto; text-align: center; }
+		
+		.urls-wrapper{ display: flex; justify-content: center; align-items: center; width: 100%; }
+		.inner-wrapper{ margin: 0 20px; }
+		.urls-wrapper .inner-wrapper:last-child{ width: 60%; }
+    </style>
+</head>
+<body>
+    
+    <div class="enter">
+    <h1>Domain Origin Generator</h1>
+        <label for="domainInput">Enter your domain:</label>
+        <input type="text" class="txtbx" id="domainInput" placeholder="example.com" oninput="generateURLs()" />
+    </div>
+
+<div id="output" class="output">
+
+</div>
+
+
+<script>
+
+function generateURLs() {
+            const domainInput = document.getElementById('domainInput').value.trim();
+            const outputDiv = document.getElementById('output');
+            const iframe = document.getElementById('myIframe');
+            const baseDomain = domainInput.replace(/^https?:\/\/(www\.)?/, ''); // Remove protocol and www.
+
+            if (baseDomain) {
+                const [domainname, domainex] = baseDomain.split(/\.(.+)/); // Split domain and extension
+
+                const urls = [
+                    `https://www.${baseDomain}`,
+                    `https://${baseDomain}`,
+                    `http://www.${baseDomain}`,
+                    `http://${baseDomain}`
+                ];
+
+                const rewriteHTTPSWWW = `RewriteEngine On
+ RewriteCond %{HTTPS} off [OR]
+ RewriteCond %{HTTP_HOST} !^www\\. [NC]
+ RewriteCond %{HTTP_HOST} ^(?:www\\.)?(.+)$ [NC]
+ RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
+                `;
+
+                const rewriteHTTPSNonWWW = `RewriteEngine On
+RewriteBase /
+
+# Redirect www to non-www (works for both HTTP and HTTPS)
+RewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Redirect HTTP to HTTPS for non-www
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^www\\. [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+                `;
+
+                const rewriteHTTPWWW = `<IfModule mod_rewrite.c>
+ RewriteEngine On
+ RewriteCond %{HTTPS} on [OR]
+ RewriteCond %{HTTP_HOST} !^www\\. [NC]
+ RewriteCond %{HTTP_HOST} ^(?:www\\.)?(.+)$ [NC]
+ RewriteRule ^ http://www.%1%{REQUEST_URI} [L,NE,R=301]
+ </IfModule>
+                `;
+
+                const rewriteHTTPNonWWW = `RewriteEngine On
+RewriteBase /
+
+# Redirect www to non-www over HTTP
+RewriteCond %{HTTP_HOST} ^www\\.${baseDomain.replace(/\./g, '\\.')}$ [NC]
+RewriteRule ^(.*)$ http://${baseDomain}/$1 [R=301,L]
+
+# Redirect HTTPS to HTTP for non-www
+RewriteCond %{HTTPS} on
+RewriteRule ^(.*)$ http://${baseDomain}/$1 [R=301,L]
+                `;
+
+                // Clear previous content
+                outputDiv.innerHTML = '';
+
+                // Add URLs inside a wrapper div
+				const urlsWrapper = document.createElement('div');
+				urlsWrapper.className = 'urls-wrapper'; // Add class name to the wrapper
+
+				// Create the first innerWrapper div
+				const innerWrapper1 = document.createElement('div');
+				innerWrapper1.className = 'inner-wrapper'; // Optional class for styling or identification
+
+				const heading1 = document.createElement('h3');
+				heading1.innerHTML = `Generated URLs for <a href="https://httpstatus.io/" target="_blank">httpstatus.io</a>`;
+				innerWrapper1.appendChild(heading1);
+
+				const urlsParagraph1 = document.createElement('p');
+				urlsParagraph1.className = 'bulkurl';
+				urlsParagraph1.innerHTML = urls.join('<br>');
+				innerWrapper1.appendChild(urlsParagraph1);
+
+				const copyUrlsButton1 = createCopyButton(urls.join('\n'), "Copy URLs");
+				innerWrapper1.appendChild(copyUrlsButton1);
+
+				// Create the second innerWrapper div
+				const innerWrapper2 = document.createElement('div');
+				innerWrapper2.className = 'inner-wrapper'; // Optional class for styling or identification
+
+				// Add iframe to innerWrapper2
+				const iframe = document.createElement('iframe');
+				iframe.id = 'myIframe';
+				iframe.src = 'https://httpstatus.io/#header-hero';
+				iframe.width = '100%';
+				iframe.height = 400;
+				iframe.style.border = '1px solid #ccc';
+				iframe.style.marginTop = '20px';
+				iframe.style.borderRadius = '10px';
+				innerWrapper2.appendChild(iframe);
+
+				// Append the innerWrapper1 and innerWrapper2 to the urlsWrapper
+				urlsWrapper.appendChild(innerWrapper1);
+				urlsWrapper.appendChild(innerWrapper2);
+
+				outputDiv.appendChild(urlsWrapper);
+				
+// Inject JavaScript inside iframe to set the scroll position
+iframe.onload = () => {
+    const contentWindow = iframe.contentWindow;
+    const scrollScript = `
+        window.scrollTo(0, 200); // Adjust scroll position as needed
+    `;
+    contentWindow.eval(scrollScript); // Evaluates the script inside the iframe
+};
+
+                // Wrapper div for rewrite rules
+                const wrapperDiv = document.createElement('div');
+                wrapperDiv.style.display = 'flex';
+                wrapperDiv.style.flexWrap = 'wrap';
+                wrapperDiv.style.gap = '20px';
+                wrapperDiv.style.marginTop = '30px';
+
+                // Helper function to create rule div
+                const createRewriteDiv = (title, rule, buttonLabel) => {
+                    const rewriteDiv = document.createElement('div');
+                    rewriteDiv.style.flex = '1';
+                    rewriteDiv.style.minWidth = '300px';
+                    rewriteDiv.innerHTML = `<h3>${title}</h3><p>${rule.replace(/\n/g, '<br>')}</p>`;
+                    const copyButton = createCopyButton(rule.trim(), buttonLabel);
+                    rewriteDiv.appendChild(copyButton);
+                    return rewriteDiv;
+                };
+
+                // Add all rewrite rules to wrapper
+                wrapperDiv.appendChild(createRewriteDiv('HTTPS and WWW', rewriteHTTPSWWW, "Copy HTTPS WWW"));
+                wrapperDiv.appendChild(createRewriteDiv('HTTPS and non-WWW', rewriteHTTPSNonWWW, "Copy HTTPS"));
+                wrapperDiv.appendChild(createRewriteDiv('HTTP and WWW', rewriteHTTPWWW, "Copy HTTP WWW"));
+                wrapperDiv.appendChild(createRewriteDiv('HTTP and non-WWW', rewriteHTTPNonWWW, "Copy HTTP"));
+
+                // Append wrapper div to output
+                outputDiv.appendChild(wrapperDiv);
+
+                // Show the iframe
+                iframe.style.display = 'block';
+            } else {
+                outputDiv.innerHTML = '';
+                iframe.style.display = 'none'; // Hide the iframe if the input is empty
+            }
+        }
+
+
+    function createCopyButton(content, buttonText) {
+        const button = document.createElement('button');
+        button.className = 'copy-btn';
+        button.textContent = buttonText;
+
+        button.onclick = () => {
+            copyToClipboard(content);
+            changeButtonText(button, buttonText);
+        };
+
+        return button;
+    }
+
+    function copyToClipboard(text) {
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+    }
+
+    function changeButtonText(button, originalText) {
+        button.textContent = 'Copied';
+        setTimeout(() => {
+            button.textContent = originalText;
+        }, 3000); // Reset to original label after 3 seconds
+    }
+</script>
+
+
+</body>
+</html>
