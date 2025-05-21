@@ -1,682 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="robots" content="noindex, nofollow">
-  <title>PBN Cheat Sheet</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-    }
-    .button-container {
-      margin: 20px;
-    }
-	  p{ margin: 0; padding: 0; font-size: 18px; }
-	  p.smalltxt{ font-size: 14px; }
-	  p.notetxt{ font-size: 16px; margin-top: 20px; }
-	  p.notetxt>span{ color: #0c569e; font-weight: bold; }
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .content-div {
-      display: none;
-      margin: 20px auto;
-      padding: 20px;
-      width: 100%;
-      max-width: 1000px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: left;
-    }
-    .content-div pre {
-      background-color: #f8f8f8;
-      padding: 0 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      overflow-x: auto;
-    }
-    .content-div code {
-      font-family: monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      white-space: pre-wrap; /* Preserve line breaks */
-    }
-    .copy-button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-    }
-    .copy-button:hover {
-      background-color: #0056b3;
-    }
-	  .httpclr{ color: #f43f41; font-weight: bold; }
-	  
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Domain Origin Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .enter{ text-align: center; } 
+        
+        .output {
+            margin-top: 20px;
+            padding: 10px 10px 50px;
+        }
+        .output p {
+            margin: 5px 0;
+        }
+        p {
+            background: #e8e8e8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .txtbx {
+            padding: 10px;
+            font-size: 15px;
+            width: 300px;
+        }
+        .copy-btn {
+            padding: 15px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #5da40d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            margin: 10px auto;
+            display: block;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .copy-btn:hover {
+            background-color: #367f4b;
+            transform: translateY(-3px);
+        }
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 2px solid #ccc;
+        }
+		.output p.bulkurl{ min-height: auto; min-height: auto; max-width: 500px; margin: 15px auto; }
+		.output p{ font-size: 15px; min-height: 285px; }
+		h3{ max-width: 500px; margin: 0 auto; text-align: center; }
+		
+		.urls-wrapper{ display: flex; justify-content: center; align-items: center; width: 100%; }
+		.inner-wrapper{ margin: 0 20px; }
+		.urls-wrapper .inner-wrapper:last-child{ width: 60%; }
+    </style>
 </head>
 <body>
-  <div class="button-container">
-    <button onclick="toggleDiv(1)">Excerpt function</button>
-    <button onclick="toggleDiv(2)">Excerpt content</button>
-    <button onclick="toggleDiv(9)">Featured Image</button>
-    <button onclick="toggleDiv(4)">Domain Origin</button>
-    <button onclick="toggleDiv(7)">PBN Robots.txt</button>
-    <button onclick="toggleDiv(3)">Meta Robots</button>
-    <button onclick="toggleDiv(8)">For NEW Read more Task</button>
-    <button onclick="toggleDiv(5)">Footer function</button>
-    <button onclick="toggleDiv(6)">Footer code</button>
-<!--	<button onclick="window.open('https://garansigacor.top/AUTOMATE_PBN/', '_blank')">Domain Origin Generator</button>-->
-  </div>
+    
+    <div class="enter">
+    <h1>Domain Origin Generator</h1>
+        <label for="domainInput">Enter your domain:</label>
+        <input type="text" class="txtbx" id="domainInput" placeholder="example.com" oninput="generateURLs()" />
+    </div>
 
-<div id="div1" class="content-div" style="display: block;">
-	<p>This code is for custom excerpt, it will display 1 image and a portion of your post with a read more button.<br>
-		<p class="smalltxt">(Some themes have a well-designed Read More button. You can remove the Read More button in this code and enable the button from your theme instead.)</p><br>
-		Copy and Paste this code to your functions.php</p>
-  <pre><code>
-function custom_homepage_excerpt_with_image($excerpt) {
-	if (is_front_page() || is_category() || is_archive()) {
-		$first_image = '';
-		preg_match('/&lt;img.*?src=["\'](.*?)["\'].*?&gt;/i', get_the_content(), $matches);
-		if (isset($matches[1])) {
-			$first_image = '&lt;img src="' . esc_url($matches[1]) . '" class="post-image" style="width: 100%; max-height: auto; margin-bottom: 15px;" /&gt;';
-		}
-
-		// Get the full post content and truncate it to 40%
-		$content = get_the_content();
-		$word_count = str_word_count(strip_tags($content));
-		$word_limit = ceil($word_count * 0.12);
-		$excerpt = wp_trim_words($content, $word_limit);
-
-		// Add "Read More" link styled as a button
-		$read_more = '&lt;a href="' . get_permalink() . '" class="read-more-button"&gt;Read More&lt;/a&gt;';
-
-		// Return the image, the truncated excerpt, and the "Read More" button
-		return $first_image . '&lt;p style="line-height: 1.6;"&gt;' . $excerpt . '&lt;/p&gt;' . $read_more;
-	}
-	return $excerpt;
-}
-
-// Apply the filter to the excerpt
-add_filter('the_excerpt', 'custom_homepage_excerpt_with_image');
-  </code></pre>
-  <button class="copy-button" onclick="copyCode('div1')">Copy Code</button>
-	<br><br>
-	<div id="readmorebtncss">
-		<p>This is for the style of your Read More button.<br> Copy and Paste this on your Theme > Customize Page > Additional CSS Section.</p>
-		<p class="smalltxt">(Just change the background-color depends on the theme of your site. Don't forget to change the hover background also.)</p>
-  <pre><code>
-.read-more-button {
-	display: inline-block;
-	margin: 0 auto;
-	text-align: center;
-	padding: 10px 15px;
-	font-size: 14px;
-	background-color: #740303;
-	color: #fff !important;
-	text-decoration: none !important;
-	border-radius: 5px;
-	font-weight: bold;
-	transition: background-color 0.3s, transform 0.3s;
-	text-transform: uppercase;
-}
-.read-more-button:hover {
-	color: #fff !important;
-	text-decoration: none;
-	background-color: #530404;
-	transform: translateY(-3px);
-}	
-  </code></pre>
-  <button class="copy-button" onclick="copyCode('readmorebtncss')">Copy Code</button>
-	</div>
+<div id="output" class="output">
 
 </div>
-<div id="div2" class="content-div">
-	
-	<section id="allfull">
-        <p>This code is to display the excerpt you added on your functions.php, this will display the customized excerpt on your site, as many themes have their own styles and formatting for excerpts.<br><br>
-Sometimes the theme already recognized the code from your functions.php, if that's the case, skip this part.<br><br>
-		Find where the content of your theme is located then change the code of it's excerpt to this:</p>
-        <p class="smalltxt">(Most themes content are located here: template-parts/content/content.php)</p>
 
-<pre><code>
-if ( is_home() || is_front_page() || is_category() || is_archive() ) {
-    the_excerpt();
-} else {
-    the_content();
-}
-</code></pre>
-            <button class="copy-button" onclick="copyCode('allfull')">Copy Code</button>
-<br><br>
-        <p>You can also use this when marketing asked for old pbn to display excerpt instead of whole post on homepage.<br> Just change the code <code>the_content();</code> to the code above.</p>
-</section>
-	
-	<br><br>
-	<section id="forcateg">
-			<p>This code is for category, archive &amp; author's part to have a read more button instead of full content.</p>
 
-<pre><code>
-if ( is_home() || is_front_page() || is_single() ) {
-    the_content();
-} else {
-    the_excerpt();
-}
-</code></pre>
-				<button class="copy-button" onclick="copyCode('forcateg')">Copy Code</button>
+<script>
 
-		</section>	
-	
- </div>
-	
-<div id="div3" class="content-div">
+function generateURLs() {
+            const domainInput = document.getElementById('domainInput').value.trim();
+            const outputDiv = document.getElementById('output');
+            const iframe = document.getElementById('myIframe');
+            const baseDomain = domainInput.replace(/^https?:\/\/(www\.)?/, ''); // Remove protocol and www.
 
-	    <p>This code is for meta robots, It will add noindex nofollow to your category, author and archive pages.<br><br>
-			Copy and Paste this code to your functions.php</p>
-<section id="code-yoast">
-	<p class="notetxt">If you have <span>Yoast SEO</span> Plugin, Use this code:</p>
-<pre><code class="yoast">
-function custom_noindex_robots_for_category_and_author($robots) {
-    if (is_category() || is_author() || is_archive()) {
-        // Set noindex, nofollow for category, archive and author pages
-        $robots = 'noindex, nofollow';
-    }
-    return $robots;
-}
-add_filter('wpseo_robots', 'custom_noindex_robots_for_category_and_author');
+            if (baseDomain) {
+                const [domainname, domainex] = baseDomain.split(/\.(.+)/); // Split domain and extension
 
-</code></pre>
-            <button class="copy-button" onclick="copyCode('code-yoast')">Copy Code</button>
-</section>
-<section id="code-aio">
-	<p class="notetxt">If you have <span>All in One SEO</span> Plugin, Use this code:</p>
-<pre><code class="aioseo">
-function aioseo_filter_robots_meta($attributes)
-{
-    if ((is_singular('post') || is_page() || is_home() || is_front_page())) {
-        $attributes['index'] = 'index';
-        $attributes['follow'] = 'follow';
-    } elseif (is_category() || is_author() || is_archive()) {
-        $attributes['noindex'] = 'noindex';
-        $attributes['nofollow'] = 'nofollow';
-    }
-    return $attributes;
-}
-add_filter('aioseo_robots_meta', 'aioseo_filter_robots_meta');
+                const urls = [
+                    `https://www.${baseDomain}`,
+                    `https://${baseDomain}`,
+                    `http://www.${baseDomain}`,
+                    `http://${baseDomain}`
+                ];
 
-</code></pre>
-            <button class="copy-button" onclick="copyCode('code-aio')">Copy Code</button>
+                const rewriteHTTPSWWW = `RewriteEngine On
+ RewriteCond %{HTTPS} off [OR]
+ RewriteCond %{HTTP_HOST} !^www\\. [NC]
+ RewriteCond %{HTTP_HOST} ^(?:www\\.)?(.+)$ [NC]
+ RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
+                `;
 
-</section>
-	</div>
-  <div id="div4" class="content-div">
-	  
-<div id="allhttps">
-<p>Redirect all to <span class="httpclr">HTTPS &amp; HTTPS WWW</span></p>
-<pre><code>
-RewriteEngine On
-
-# Redirect all HTTP requests to HTTPS, preserving www or non-www
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</code></pre>
-<button class="copy-button" onclick="copyCode('allhttps')">Copy Code</button>
-</div>
-	 <br>
-<div id="https">
-<p>Redirect all to <span class="httpclr">HTTPS</span></p>
-<pre><code>
-RewriteEngine On
+                const rewriteHTTPSNonWWW = `RewriteEngine On
 RewriteBase /
 
 # Redirect www to non-www (works for both HTTP and HTTPS)
-RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
 # Redirect HTTP to HTTPS for non-www
 RewriteCond %{HTTPS} off
-RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} !^www\\. [NC]
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-</code></pre>
-<button class="copy-button" onclick="copyCode('https')">Copy HTTPS</button>
-</div>
-	 <br>
-<div id="httpswww">
-<p>Redirect all to <span class="httpclr">HTTPS WWW</span></p>
-<pre><code>
-RewriteEngine On
-RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
-RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
-</code></pre>
-<button class="copy-button" onclick="copyCode('httpswww')">Copy HTTPS WWW</button>
-</div>
-	 <br>
-<div id="http">
-<p>Redirect all to <span class="httpclr">HTTP</span></p>
-<pre><code>
-RewriteEngine On
-RewriteBase /
+                `;
 
-# Redirect www to non-www (any domain)
-RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
-
-# Redirect HTTPS to HTTP (only for non-www)
-RewriteCond %{HTTPS} on
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1 [R=301,L]
-</code></pre>
-<button class="copy-button" onclick="copyCode('http')">Copy HTTP</button>
-</div>
-	 <br>
-<div id="httpwww">
-<p>Redirect all to <span class="httpclr">HTTP WWW</span></p>
-<pre><code>
-&lt;IfModule mod_rewrite.c&gt;
+                const rewriteHTTPWWW = `<IfModule mod_rewrite.c>
  RewriteEngine On
  RewriteCond %{HTTPS} on [OR]
- RewriteCond %{HTTP_HOST} !^www\. [NC]
- RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+ RewriteCond %{HTTP_HOST} !^www\\. [NC]
+ RewriteCond %{HTTP_HOST} ^(?:www\\.)?(.+)$ [NC]
  RewriteRule ^ http://www.%1%{REQUEST_URI} [L,NE,R=301]
-&lt;/IfModule&gt;
-</code></pre>
-<button class="copy-button" onclick="copyCode('httpwww')">Copy HTTP WWW</button>
-</div>
-	  
-	  
-	  
-	</div>
-  <div id="div5" class="content-div">
-	<p>This code is to add a custom Footer Menu on your wordpress menu dashboard so you can call it if needed.<br><br>
-		Copy and Paste this code to your functions.php.</p>
-
-<pre><code>
-function register_custom_menus() {
-	register_nav_menus( array(
-		'footer'  => __( 'Footer Menu' ),
-	) );
-}
-add_action( 'after_setup_theme', 'register_custom_menus' );
-
-</code></pre>
-            <button class="copy-button" onclick="copyCode('div5')">Copy Code</button>
-	  <br><br>
-
-	<p>If there's an existing register menu on your theme's function.php, just add the <code>'footer'  => __( 'Footer Menu' ), </code>under the Primary or Main Menu</p>
-	  
-	</div>
-  <div id="div6" class="content-div">
-	
-	<p>This code is for your footer.php, make sure to backup your footer.php before copy and pasting this code.<br><br>
-Delete the <code>&lt;footer&gt;&lt;/footer&gt;</code> code on your footer.php and replace it with this code.</p><br>
-
-            <button class="copy-button" onclick="copyCode('div6')">Copy Code Below</button>
-<pre><code>
-&lt;style&gt;
-#footer {
-    background-color: #0E0E0E; 
-    padding: 15px 0;
-    border-top: 1px solid #e9ecef; 
-}
-#footer p{ margin: 0; color: #fff; }
-
-#footer .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-#footer .footer-left {
-    text-align: left;
-    flex: 1; 
-    font-size: 14px;
-    color: #fff; 
-}
-
-#footer .footer-right {
-    text-align: right;
-    flex: 1;
-}
-
-#footer .footer {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
-    justify-content: flex-end; 
-}
-
-#footer .footer a {
-    text-decoration: none;
-    color: #fff; 
-    font-size: 14px;
-    transition: color 0.3s;
-}
-
-#footer .footer a:hover {
-    color: #fff; 
-}
-
-@media (max-width: 768px) {
-    #footer .container {
-        flex-direction: column;
-        align-items: center;
-    }
-    #footer .footer-left, #footer .footer-right {
-        text-align: center;
-        flex: unset; 
-        margin-bottom: 10px;
-    }
-    #footer .footer {
-        justify-content: center;
-    }
-}
-&lt;/style&gt;
-&lt;footer id="footer"&gt;
-	&lt;div class="container"&gt;
-		&lt;div class="footer-left"&gt;
-			&lt;p&gt;© Copyright &lt;?php echo date('Y'); ?&gt; &lt;?php bloginfo('name'); ?&gt; - All Rights Reserved&lt;/p&gt;
-		&lt;/div&gt;
-		&lt;div class="footer-right"&gt;
-			&lt;?php
-
-			if (has_nav_menu('footer')) {
-				wp_nav_menu(array(
-					'theme_location' => 'footer',
-					'container' => false,
-					'menu_class' => 'footer'
-				));
-			}
-			?&gt;
-		&lt;/div&gt;
-	&lt;/div&gt;
-&lt;/footer&gt;
-</code></pre>
-	  <br><br>
-
-	</div>
-	
-
-
-<div id="div7" class="content-div">
-	
-	<p class="notetxt">This is the required code for your PBN's <span>robots.txt</span>.</p>
-<button class="copy-button" onclick="copyCode('div7')">Copy Code Below</button>
-<pre><code class="yoast">
-User-agent: *
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
-
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: Rogerbot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: ia_archiver
-Disallow: /
-
-User-agent: ScoutJet
-Disallow: /
-
-User-agent: sistrix
-Disallow: /
-
-User-agent: SearchmetricsBot
-Disallow: /
-
-User-agent: SEOkicks-Robot
-Disallow: /
-
-User-agent: Lipperhey Spider
-Disallow: /
-
-User-agent: Exabot
-Disallow: /
-
-User-agent: NCBot
-Disallow: /
-
-User-agent: BacklinkCrawler
-Disallow: /
-
-User-agent: archive.org_bot
-Disallow: /
-
-User-agent: meanpathbot
-Disallow: /
-
-User-agent: PagesInventory
-Disallow: /
-
-User-agent: Aboundexbot
-Disallow: /
-
-User-agent: sp_auditbot
-Disallow: /
-
-User-agent: linkdexbot
-Disallow: /
-
-User-agent: Gigabot
-Disallow: /
-
-User-agent: dotbot
-Disallow: /
-
-User-agent: Nutch
-Disallow: /
-
-User-agent: BLEXBot
-Disallow: /
-
-User-agent: Ezooms
-Disallow: /
-
-User-agent: Majestic-12
-Disallow: /
-
-User-agent: Majestic-SEO
-Disallow: /
-
-User-agent: DSearch
-Disallow: /
-
-User-agent: MJ12
-Disallow: /
-
-User-agent: BlekkoBot
-Disallow: /
-
-User-agent: NerdyBot
-Disallow: /
-
-User-agent: JamesBOT
-Disallow: /
-
-User-agent: TinEye
-Disallow: /
-
-User-agent: Baiduspider
-Disallow: /
-
-User-agent: serpstatbot
-Disallow: /
-
-User-agent: spyfu
-Disallow: /
-
-User-agent: SEO-PowerSuite-bot
-Disallow: /
-
-Sitemap: http://farmingtonhistoricplantation.org/sitemap.xml
-
-</code></pre>
-
-</div>
-
-<div id="div8" class="content-div">
-	
-	<section id="forcategexcerpt">
-			<p>This code is for category, archive &amp; author's part to have a read more button instead of full content.</p>
-
-<pre><code>
-if ( is_home() || is_front_page() || is_single() ) {
-    the_content();
-} else {
-    the_excerpt();
-}
-</code></pre>
-	<button class="copy-button" onclick="copyCode('forcategexcerpt')">Copy Code</button>
-
-		</section>	<br><br>
-		
-	<section id="fcwithreadmorestyle">
-  
-	    	<p>This code already contains the style for the read more button so you don't need to copy and paste the css on your dashboard theme customize. Copy and Paste this on your theme's functions.php.</p>
-	    	<p>Additional: 25 Articles Max on Homepage code included.</p>
-  <button class="copy-button" onclick="copyCode('fcwithreadmorestyle')">Copy Code Below</button>
-  
-  <pre><code>
-function custom_homepage_excerpt_with_image($excerpt) {
-	if (is_front_page() || is_category() || is_archive() || is_author()) {
-		$first_image = '';
-		preg_match('/&lt;img.*?src=["\'](.*?)["\'].*?&gt;/i', get_the_content(), $matches);
-		if (isset($matches[1])) {
-			$first_image = '&lt;img src="' . esc_url($matches[1]) . '" class="post-image" style="width: 100%; max-height: auto; margin-bottom: 15px;" /&gt;';
-		}
-
-		// Get the full post content and truncate it to 40%
-		$content = get_the_content();
-		$word_count = str_word_count(strip_tags($content));
-		$word_limit = ceil($word_count * 0.12);
-		$excerpt = wp_trim_words($content, $word_limit);
-
-		// Add "Read More" link styled as a button
-		$read_more = '&lt;a href="' . get_permalink() . '" class="read-more-button" style="display: inline-block; padding: 10px 15px; background-color: #0073aa; color: #fff !important; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s ease-in-out, color 0.3s ease-in-out;" 
-onmouseover="this.style.backgroundColor=\'#005f8d\'; this.style.color=\'#fff !important\'" 
-onmouseout="this.style.backgroundColor=\'#0073aa\'; this.style.color=\'#fff !important\'"&gt;
-Read More&lt;/a&gt;';
-
-
-
-		// Return the image, the truncated excerpt, and the "Read More" button
-		return $first_image . '&lt;p style="line-height: 1.6;"&gt;' . $excerpt . '&lt;/p&gt;' . $read_more;
-	}
-	return $excerpt;
-}
-
-// Apply the filter to the excerpt
-add_filter('the_excerpt', 'custom_homepage_excerpt_with_image');
-
-
-function limit_homepage_posts( $query ) {
-    if ( $query-&gt;is_home() &amp;&amp; $query-&gt;is_main_query() ) {
-        $query-&gt;set( 'posts_per_page', 25 );
-    }
-}
-add_action( 'pre_get_posts', 'limit_homepage_posts' );
-
-add_filter( 'auto_update_plugin', '__return_true' );
-  </code></pre>
-	</section>
-	
-</div>
-
-<div id="div9" class="content-div">
-		
-	<section id="featuredimage">
-  
-	    	<p>This code is for the featured image in block themes or you can also try on other normal themes. <br><br>If you don’t want to upload a featured image but your theme requires one for the layout, <br>This code checks if a post has a featured image. If not, it extracts the first image from the post content and uses it as the thumbnail. <br><br>Add this code to your theme's functions.php file.</p>
-  <button class="copy-button" onclick="copyCode('featuredimage')">Copy Code Below</button>
-  
-  <pre><code>
-function get_first_image_from_post($post_id) {
-    $post = get_post($post_id);
-    if (!$post) return '';
-
-    // Extract images from post content
-    preg_match('/&lt;img.*?src=["\'](.*?)["\']/', $post->post_content, $matches);
-    
-    return !empty($matches[1]) ? $matches[1] : ''; // Return first image URL if found
-}
-
-function custom_post_thumbnail($html, $post_id, $post_thumbnail_id, $size, $attr) {
-    if (has_post_thumbnail($post_id)) {
-        return $html; // If featured image exists, return it
-    }
-
-    $first_image = get_first_image_from_post($post_id);
-    if ($first_image) {
-        return '&lt;img src="' . esc_url($first_image) . '" class="wp-post-image" alt=""&gt;';
-    }
-
-    return $html; // Return default output if no image is found
-}
-
-add_filter('post_thumbnail_html', 'custom_post_thumbnail', 10, 5);
-  </code></pre>
-	</section>
-	
-</div>
-
-  <script>
-    function toggleDiv(divNumber) {
-      // Get all div elements
-      const divs = document.querySelectorAll('.content-div');
-
-      // Loop through all divs and hide them
-      divs.forEach((div, index) => {
-        if (index + 1 === divNumber) {
-          // Toggle the selected div
-          div.style.display = div.style.display === "none" || div.style.display === "" ? "block" : "none";
-        } else {
-          // Hide other divs
-          div.style.display = "none";
+ </IfModule>
+                `;
+
+                const rewriteHTTPNonWWW = `RewriteEngine On
+RewriteBase /
+
+# Redirect www to non-www over HTTP
+RewriteCond %{HTTP_HOST} ^www\\.${baseDomain.replace(/\./g, '\\.')}$ [NC]
+RewriteRule ^(.*)$ http://${baseDomain}/$1 [R=301,L]
+
+# Redirect HTTPS to HTTP for non-www
+RewriteCond %{HTTPS} on
+RewriteRule ^(.*)$ http://${baseDomain}/$1 [R=301,L]
+                `;
+
+                // Clear previous content
+                outputDiv.innerHTML = '';
+
+                // Add URLs inside a wrapper div
+				const urlsWrapper = document.createElement('div');
+				urlsWrapper.className = 'urls-wrapper'; // Add class name to the wrapper
+
+				// Create the first innerWrapper div
+				const innerWrapper1 = document.createElement('div');
+				innerWrapper1.className = 'inner-wrapper'; // Optional class for styling or identification
+
+				const heading1 = document.createElement('h3');
+				heading1.innerHTML = `Generated URLs for <a href="https://httpstatus.io/" target="_blank">httpstatus.io</a>`;
+				innerWrapper1.appendChild(heading1);
+
+				const urlsParagraph1 = document.createElement('p');
+				urlsParagraph1.className = 'bulkurl';
+				urlsParagraph1.innerHTML = urls.join('<br>');
+				innerWrapper1.appendChild(urlsParagraph1);
+
+				const copyUrlsButton1 = createCopyButton(urls.join('\n'), "Copy URLs");
+				innerWrapper1.appendChild(copyUrlsButton1);
+
+				// Create the second innerWrapper div
+				const innerWrapper2 = document.createElement('div');
+				innerWrapper2.className = 'inner-wrapper'; // Optional class for styling or identification
+
+				// Add iframe to innerWrapper2
+				const iframe = document.createElement('iframe');
+				iframe.id = 'myIframe';
+				iframe.src = 'https://httpstatus.io/#header-hero';
+				iframe.width = '100%';
+				iframe.height = 400;
+				iframe.style.border = '1px solid #ccc';
+				iframe.style.marginTop = '20px';
+				iframe.style.borderRadius = '10px';
+				innerWrapper2.appendChild(iframe);
+
+				// Append the innerWrapper1 and innerWrapper2 to the urlsWrapper
+				urlsWrapper.appendChild(innerWrapper1);
+				urlsWrapper.appendChild(innerWrapper2);
+
+				outputDiv.appendChild(urlsWrapper);
+				
+// Inject JavaScript inside iframe to set the scroll position
+iframe.onload = () => {
+    const contentWindow = iframe.contentWindow;
+    const scrollScript = `
+        window.scrollTo(0, 200); // Adjust scroll position as needed
+    `;
+    contentWindow.eval(scrollScript); // Evaluates the script inside the iframe
+};
+
+                // Wrapper div for rewrite rules
+                const wrapperDiv = document.createElement('div');
+                wrapperDiv.style.display = 'flex';
+                wrapperDiv.style.flexWrap = 'wrap';
+                wrapperDiv.style.gap = '20px';
+                wrapperDiv.style.marginTop = '30px';
+
+                // Helper function to create rule div
+                const createRewriteDiv = (title, rule, buttonLabel) => {
+                    const rewriteDiv = document.createElement('div');
+                    rewriteDiv.style.flex = '1';
+                    rewriteDiv.style.minWidth = '300px';
+                    rewriteDiv.innerHTML = `<h3>${title}</h3><p>${rule.replace(/\n/g, '<br>')}</p>`;
+                    const copyButton = createCopyButton(rule.trim(), buttonLabel);
+                    rewriteDiv.appendChild(copyButton);
+                    return rewriteDiv;
+                };
+
+                // Add all rewrite rules to wrapper
+                wrapperDiv.appendChild(createRewriteDiv('HTTPS and WWW', rewriteHTTPSWWW, "Copy HTTPS WWW"));
+                wrapperDiv.appendChild(createRewriteDiv('HTTPS and non-WWW', rewriteHTTPSNonWWW, "Copy HTTPS"));
+                wrapperDiv.appendChild(createRewriteDiv('HTTP and WWW', rewriteHTTPWWW, "Copy HTTP WWW"));
+                wrapperDiv.appendChild(createRewriteDiv('HTTP and non-WWW', rewriteHTTPNonWWW, "Copy HTTP"));
+
+                // Append wrapper div to output
+                outputDiv.appendChild(wrapperDiv);
+
+                // Show the iframe
+                iframe.style.display = 'block';
+            } else {
+                outputDiv.innerHTML = '';
+                iframe.style.display = 'none'; // Hide the iframe if the input is empty
+            }
         }
-      });
+
+
+    function createCopyButton(content, buttonText) {
+        const button = document.createElement('button');
+        button.className = 'copy-btn';
+        button.textContent = buttonText;
+
+        button.onclick = () => {
+            copyToClipboard(content);
+            changeButtonText(button, buttonText);
+        };
+
+        return button;
     }
 
-  function copyCode(divId) {
-    const div = document.getElementById(divId);
-    const code = div.querySelector('pre code').innerText; // Use innerText to copy the raw text
-    const button = div.querySelector('.copy-button');
-    
-    navigator.clipboard.writeText(code).then(() => {
-      button.textContent = 'Copied';
-      setTimeout(() => {
-        button.textContent = 'Copy Code';
-      }, 5000);
-    }).catch(err => {
-      button.textContent = 'Failed';
-      setTimeout(() => {
-        button.textContent = 'Copy Code';
-      }, 5000);
-    });
-  }
-	  
-	  
-  </script>
+    function copyToClipboard(text) {
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+    }
+
+    function changeButtonText(button, originalText) {
+        button.textContent = 'Copied';
+        setTimeout(() => {
+            button.textContent = originalText;
+        }, 3000); // Reset to original label after 3 seconds
+    }
+</script>
+
+
 </body>
 </html>
